@@ -59,7 +59,6 @@ const Login = () => {
           Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
         <p style={{ marginTop: '10px', textAlign: 'center', fontSize: '12px', color: '#6b7280' }}>
-          Default Admin: username: admin, password: admin123
         </p>
       </div>
     </div>
