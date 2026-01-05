@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import './Modal.css';
 
 const EmployeeModal = ({ employee, onClose }) => {
@@ -15,6 +15,7 @@ const EmployeeModal = ({ employee, onClose }) => {
     salary_amount: '',
     advance_amount: ''
   });
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -46,12 +47,16 @@ const EmployeeModal = ({ employee, onClose }) => {
 
     try {
       if (employee) {
-        await axios.put(`/api/employees/${employee.id}`, formData);
+        // UPDATE
+        await api.put(`/api/employees/${employee._id}`, formData);
       } else {
-        await axios.post('/api/employees', formData);
+        // CREATE
+        await api.post('/api/employees', formData);
       }
+
       onClose();
     } catch (err) {
+      console.error(err);
       setError(err.response?.data?.error || 'Failed to save employee');
     } finally {
       setLoading(false);
@@ -65,110 +70,60 @@ const EmployeeModal = ({ employee, onClose }) => {
           <h2>{employee ? 'Edit Employee' : 'Add New Employee'}</h2>
           <button className="modal-close" onClick={onClose}>×</button>
         </div>
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Name *</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
           </div>
+
           <div className="form-group">
             <label>Age *</label>
-            <input
-              type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              required
-              min="1"
-            />
+            <input type="number" name="age" value={formData.age} onChange={handleChange} required />
           </div>
+
           <div className="form-group">
             <label>Mobile Number *</label>
-            <input
-              type="text"
-              name="mobile_number"
-              value={formData.mobile_number}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="mobile_number" value={formData.mobile_number} onChange={handleChange} required />
           </div>
+
           <div className="form-group">
             <label>Aadhaar Number *</label>
-            <input
-              type="text"
-              name="aadhaar_number"
-              value={formData.aadhaar_number}
-              onChange={handleChange}
-              required
-              disabled={!!employee}
-            />
+            <input type="text" name="aadhaar_number" value={formData.aadhaar_number} onChange={handleChange} required disabled={!!employee} />
           </div>
+
           <div className="form-group">
             <label>UAN Number *</label>
-            <input
-              type="text"
-              name="uan_number"
-              value={formData.uan_number}
-              onChange={handleChange}
-              required
-              disabled={!!employee}
-            />
+            <input type="text" name="uan_number" value={formData.uan_number} onChange={handleChange} required disabled={!!employee} />
           </div>
+
           <div className="form-group">
             <label>Bank Account Number</label>
-            <input
-              type="text"
-              name="bank_account_number"
-              value={formData.bank_account_number}
-              onChange={handleChange}
-            />
+            <input type="text" name="bank_account_number" value={formData.bank_account_number} onChange={handleChange} />
           </div>
+
           <div className="form-group">
             <label>Bank IFSC</label>
-            <input
-              type="text"
-              name="bank_ifsc"
-              value={formData.bank_ifsc}
-              onChange={handleChange}
-            />
+            <input type="text" name="bank_ifsc" value={formData.bank_ifsc} onChange={handleChange} />
           </div>
+
           <div className="form-group">
             <label>Bank Name</label>
-            <input
-              type="text"
-              name="bank_name"
-              value={formData.bank_name}
-              onChange={handleChange}
-            />
+            <input type="text" name="bank_name" value={formData.bank_name} onChange={handleChange} />
           </div>
+
           <div className="form-group">
             <label>Salary Amount</label>
-            <input
-              type="number"
-              name="salary_amount"
-              value={formData.salary_amount}
-              onChange={handleChange}
-              min="0"
-              step="0.01"
-            />
+            <input type="number" name="salary_amount" value={formData.salary_amount} onChange={handleChange} />
           </div>
+
           <div className="form-group">
             <label>Advance Amount</label>
-            <input
-              type="number"
-              name="advance_amount"
-              value={formData.advance_amount}
-              onChange={handleChange}
-              min="0"
-              step="0.01"
-            />
+            <input type="number" name="advance_amount" value={formData.advance_amount} onChange={handleChange} />
           </div>
+
           {error && <div className="error">{error}</div>}
+
           <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
             <button type="submit" className="btn btn-primary" disabled={loading}>
               {loading ? 'Saving...' : employee ? 'Update' : 'Create'}
@@ -184,4 +139,3 @@ const EmployeeModal = ({ employee, onClose }) => {
 };
 
 export default EmployeeModal;
-
